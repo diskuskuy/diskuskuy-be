@@ -4,13 +4,12 @@ from . import views
 
 
 router = routers.DefaultRouter()
-router.register('initialpost', views.InitialPostViewSet)
-router.register('replypost', views.ReplyPostViewSet)
-router.register('nestedreplypost', views.NestedReplyPostViewSet)
+router.register('Thread', views.ThreadViewSet)
+router.register('Week', views.WeekViewSet)
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
     path('', include(router.urls)),
-    path('api-auth/', include('rest_framework.urls', namespace='post'))
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]
