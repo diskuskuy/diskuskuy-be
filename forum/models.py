@@ -8,7 +8,7 @@ class Week(models.Model):
 
 class Thread(models.Model):
     title = models.CharField(max_length=500)
-    week = models.ForeignKey(Week, on_delete=models.CASCADE)
+    week = models.ForeignKey(Week, on_delete=models.CASCADE, related_name="thread")
 
     def __str__(self):
         return self.title
@@ -17,7 +17,7 @@ class DiscussionGuide(models.Model):
     deadline = models.DateTimeField()
     description = models.CharField(max_length=500)
     mecanism_expectation = models.CharField(max_length=500)
-    thread = models.ForeignKey(Thread, on_delete=models.CASCADE)
+    thread = models.ForeignKey(Thread, on_delete=models.CASCADE, related_name="discussion_guide")
 
 class Summary(models.Model):
     content = models.TextField()
@@ -36,7 +36,7 @@ class InquiryPhase(models.Model):
         PHASE3 = 3
         PHASE4 = 4
 
-    discussion_guide = models.ForeignKey(DiscussionGuide, on_delete=models.CASCADE)
+    discussion_guide = models.ForeignKey(DiscussionGuide, on_delete=models.CASCADE, default=1)
     state = models.CharField(
         max_length=255,
         choices=InquiryState.choices,

@@ -6,6 +6,10 @@ from . import views
 router = routers.DefaultRouter()
 router.register('Thread', views.ThreadViewSet)
 router.register('Week', views.WeekViewSet)
+router.register('ReferenceFile', views.ReferenceFileViewSet)
+router.register('Summary', views.SummaryViewSet)
+router.register('InquiryPhase', views.InquiryPhaseViewSet)
+router.register('DiscussionGuide', views.DiscussionGuideViewSet)
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.

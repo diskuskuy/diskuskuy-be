@@ -1,7 +1,10 @@
 coverage>=5.3,<6.0
 dj-database-url>=0.5.0
 Django>=3.1.0,<4.0.0
+django-tinymce>=3.5.0
+djangorestframework>>=3.14.0
 gunicorn>=20.0.0,<21.0.0
+injector>=0.20.1
 psycopg2-binary>=2.8.0,<3.0.0
 selenium>=3.141.0,<4.0.0
 whitenoise>=5.2.0,<6.0.0
