@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'forum',
 ]
 
@@ -84,9 +85,9 @@ WSGI_APPLICATION = 'diskuskuy_be.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'eiyykemo',
-        'USER': 'eiyykemo',
-        'PASSWORD': 'zr5LhvBKDYiUesF9rLQoht28lM3Tu5Jc',
+        'NAME': 'ujernqlt',
+        'USER': 'ujernqlt',
+        'PASSWORD': '4EN3ydpmckbHq6brXIowykrdO0tsljbe',
         'HOST': 'tiny.db.elephantsql.com',
         'PORT': '5432',
     }
