@@ -8,7 +8,7 @@ class Week(models.Model):
 
 class Thread(models.Model):
     title = models.CharField(max_length=500)
-    week = models.ForeignKey(Week, on_delete=models.CASCADE)
+    week = models.ForeignKey(Week, related_name="threads", on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title
