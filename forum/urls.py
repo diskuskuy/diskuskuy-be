@@ -4,7 +4,7 @@ from . import views
 
 
 router = routers.DefaultRouter()
-router.register('Thread', views.ThreadViewSet, 'Thread')
+router.register('Thread', views.ThreadViewSet, basename='Thread')
 router.register('ReferenceFile', views.ReferenceFileViewSet)
 router.register('Summary', views.SummaryViewSet)
 router.register('InquiryPhase', views.InquiryPhaseViewSet)

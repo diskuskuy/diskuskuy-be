@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from post.serializers import InitialPostSerializer
 
 from .models import *
 

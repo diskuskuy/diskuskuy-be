@@ -21,12 +21,12 @@ class DiscussionGuide(models.Model):
 
 class Summary(models.Model):
     content = models.TextField()
-    thread = models.ForeignKey(Thread, on_delete=models.CASCADE)
+    thread = models.ForeignKey(Thread, on_delete=models.CASCADE, related_name="summary")
 
 class ReferenceFile(models.Model):
     title = models.CharField(max_length=100)
     url = models.TextField()
-    thread = models.ForeignKey(Thread, on_delete=models.CASCADE,)
+    thread = models.ForeignKey(Thread, on_delete=models.CASCADE, related_name="reference_file")
 
 class InquiryPhase(models.Model):
 
@@ -36,7 +36,7 @@ class InquiryPhase(models.Model):
         PHASE3 = 3
         PHASE4 = 4
 
-    discussion_guide = models.ForeignKey(DiscussionGuide, on_delete=models.CASCADE, default=1)
+    discussion_guide = models.ForeignKey(DiscussionGuide, on_delete=models.CASCADE, default=1, related_name="inquiry_phase")
     state = models.CharField(
         max_length=255,
         choices=InquiryState.choices,
