@@ -25,6 +25,7 @@ class DiscussionGuideSerializer(serializers.ModelSerializer):
 class ThreadSerializer(serializers.ModelSerializer):
     referenceFile = ReferenceFileSerializer(read_only=True, many=True)
     summary = SummarySerializer(read_only=True, many=True)
+    initial_post = InitialPostSerializer(read_only=True, many=True)
     class Meta:
         model = Thread
         fields = '__all__'
