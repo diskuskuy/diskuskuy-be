@@ -9,8 +9,8 @@ from .models import *
 class ThreadViewSet(viewsets.ModelViewSet):
     def list(self, request):
         queryset = Thread.objects.all()
-        serializer = ThreadSerializer(queryset, many=True)
-        return Response(serializer.data)
+        serializer_class = ThreadSerializer(queryset, many=True)
+        return Response(serializer_class.data)
 
 class ReferenceFileViewSet(viewsets.ModelViewSet):
     queryset = ReferenceFile.objects.all()
