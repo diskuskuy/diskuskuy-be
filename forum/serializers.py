@@ -28,11 +28,15 @@ class DiscussionGuideRequestSerializer(serializers.ModelSerializer):
         model = DiscussionGuide
         fields = '__all__'
 
+class DiscussionGuideStateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DiscussionGuide
+        fields = ('id','state')
+
 class DiscussionGuideResponseSerializer(serializers.ModelSerializer):
     class Meta:
         model = DiscussionGuide
         fields = ('id','deadline','description','mechanism_expectation', 'state')
-
 
 class ThreadRequestSerializer(serializers.ModelSerializer):
     initial_post = InitialPostThreadSerializer()
