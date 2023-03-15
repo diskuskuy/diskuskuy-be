@@ -10,8 +10,8 @@ class InitialPostViewSet(viewsets.ModelViewSet):
 
 class ReplyPostViewSet(viewsets.ModelViewSet):
     queryset = ReplyPost.objects.all()
-    serializer_class = ReplyPostSerializer
+    serializer_class = ReplyPostRequestSerializer
 
 class NestedReplyPostViewSet(viewsets.ModelViewSet):
     queryset = NestedReplyPost.objects.all()
-    serializer_class = NestedReplyPostSerializer
+    serializer_class = NestedReplyPostRequestSerializer
