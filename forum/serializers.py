@@ -13,11 +13,6 @@ class SummarySerializer(serializers.ModelSerializer):
         model = Summary
         fields = '__all__'
 
-class InquiryPhaseSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = InquiryPhase
-        fields = '__all__'
-
 class DiscussionGuideSerializer(serializers.ModelSerializer):
     class Meta:
         model = DiscussionGuide
@@ -25,15 +20,16 @@ class DiscussionGuideSerializer(serializers.ModelSerializer):
 
 class ThreadRequestSerializer(serializers.ModelSerializer):
     initial_post = InitialPostThreadSerializer()
-    referenceFile = ReferenceFileSerializer(read_only=True, many=True)
+    reference_file = ReferenceFileSerializer(read_only=True, many=True)
     summary = SummarySerializer(read_only=True)
+    discussion_guide = DiscussionGuideSerializer(read_only=True)
     
     class Meta:
         model = Thread
         fields = '__all__'
     
     def create(self, validated_data):
-        week = get_object_or_404(Week.objects.all(), pk=validated_data['week'])
+        week = get_object_or_404(Week.objects.all(), pk=validated_data['week'].id)
         thread = Thread(
             title=validated_data['title'],
             week=week
@@ -42,11 +38,13 @@ class ThreadRequestSerializer(serializers.ModelSerializer):
         initial_post = InitialPost(
             tag=validated_data['initial_post']['tag'],
             content=validated_data['initial_post']['content'],
-            date=validated_data['initial_post']['date'],
             thread=thread
         )
         initial_post.save()
         return thread
+
+    # def update():
+
 
 class ThreadResponseSerializer(serializers.ModelSerializer): #buat tampilan di week
     class Meta:

@@ -7,7 +7,6 @@ router.register('Week', views.WeekViewSet)
 router.register('Thread', views.ThreadViewSet)
 router.register('ReferenceFile', views.ReferenceFileViewSet)
 router.register('Summary', views.SummaryViewSet)
-router.register('InquiryPhase', views.InquiryPhaseViewSet)
 router.register('DiscussionGuide', views.DiscussionGuideViewSet)
 
 # Wire up our API using automatic URL routing.

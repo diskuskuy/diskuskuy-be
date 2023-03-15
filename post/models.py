@@ -14,7 +14,7 @@ class InitialPost(models.Model):
     # user = 
 
     def __str__(self):
-        return self.title
+        return self.content
 
     # def number_of_likes(self):
     #     return self.likes.count()
@@ -29,7 +29,7 @@ class ReplyPost(models.Model):
     # user = 
 
     def __str__(self):
-        return self.title
+        return self.content
 
     # def number_of_likes(self):
     #     return self.likes.count()
@@ -43,7 +43,7 @@ class NestedReplyPost(models.Model):
     # user = 
 
     def __str__(self):
-        return self.title
+        return self.content
 
     # def number_of_likes(self):
     #     return self.likes.count()
