@@ -18,6 +18,11 @@ class DiscussionGuideSerializer(serializers.ModelSerializer):
         model = DiscussionGuide
         fields = '__all__'
 
+class DiscussionGuideStateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DiscussionGuide
+        fields = ('id','state')
+
 class ThreadRequestSerializer(serializers.ModelSerializer):
     initial_post = InitialPostThreadSerializer()
     reference_file = ReferenceFileSerializer(read_only=True, many=True)
