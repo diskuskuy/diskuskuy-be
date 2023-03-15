@@ -5,7 +5,7 @@ from . import views
 
 router = routers.DefaultRouter()
 router.register('Thread', views.ThreadViewSet)
-router.register('Week', views.WeekViewSet, basename='Week')
+router.register('Week', views.WeekViewSet)
 # router.register('DiscussionGuide', views.DiscussionGuideViewSet)
 
 # Wire up our API using automatic URL routing.
