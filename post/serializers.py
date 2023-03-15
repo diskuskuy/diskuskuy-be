@@ -19,3 +19,8 @@ class InitialPostSerializer(serializers.ModelSerializer):
     class Meta:
         model = InitialPost
         fields = '__all__'
+
+class InitialPostThreadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = InitialPost
+        fields = ('id', 'tag', 'content', 'date')

@@ -9,7 +9,7 @@ from .models import *
 
 class ThreadViewSet(viewsets.ModelViewSet):
     queryset = Thread.objects.all()
-    serializer_class = ThreadSerializer
+    serializer_class = ThreadRequestSerializer
 
 class WeekViewSet(viewsets.ModelViewSet):
     queryset = Week.objects.all()
@@ -43,4 +43,3 @@ class InquiryPhaseViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
-

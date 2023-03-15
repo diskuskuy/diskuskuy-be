@@ -5,11 +5,10 @@ from forum.models import Thread
 from datetime import datetime
 
 class InitialPost(models.Model):
-    title = models.CharField(max_length=100, default="Title-1")
     tag = models.CharField(max_length=100, default="Pemicu")
     content = HTMLField(default=" ")
     date = models.DateTimeField(auto_now=True, editable=False)
-    thread = models.ForeignKey(Thread, on_delete=models.CASCADE, default=1, related_name="initial_post")
+    thread = models.OneToOneField(Thread, on_delete=models.CASCADE, default=1, related_name="initial_post")
     # lecturer = 
     # likes = models.ManyToManyField(User, blank=True, related_name='likes')
     # user = 
@@ -21,7 +20,6 @@ class InitialPost(models.Model):
     #     return self.likes.count()
 
 class ReplyPost(models.Model):
-    title = models.CharField(max_length=100, default="Title-1")
     tag = models.CharField(max_length=100, default="Pendapat")
     content = HTMLField(default=" ")
     date = models.DateTimeField(auto_now=True, editable=False)
@@ -37,7 +35,6 @@ class ReplyPost(models.Model):
     #     return self.likes.count()
 
 class NestedReplyPost(models.Model):
-    title = models.CharField(max_length=100, default="Title-1")
     tag = models.CharField(max_length=100, default="Pendapat")
     content = HTMLField(default=" ")
     date = models.DateTimeField(auto_now=True, editable=False)
