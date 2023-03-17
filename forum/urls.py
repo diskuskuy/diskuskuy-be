@@ -1,5 +1,6 @@
 from django.urls import include, path
 from rest_framework import routers
+from rest_framework.urlpatterns import format_suffix_patterns
 from . import views
 
 router = routers.DefaultRouter()
@@ -15,4 +16,5 @@ urlpatterns = [
     path('', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('analytics/', views.DiscussionAnalytics.as_view(), name="analytics"),
+    path('update-state/<int:pk>/', views.discussion_guide_update_state),
 ]
