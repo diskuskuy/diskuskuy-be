@@ -9,17 +9,17 @@ class ReferenceFileRequestSerializer(serializers.ModelSerializer):
         model = ReferenceFile
         fields = '__all__'
 
-class ReferenceFileResponseSerializer(serializers.ModelSerializer):
+class ReferenceFileThreadSerializer(serializers.ModelSerializer):
     class Meta:
         model = ReferenceFile
         fields = ('id','title', 'url')
 
-class SummaryRequestSerializer(serializers.ModelSerializer):
+class SummarySerializer(serializers.ModelSerializer):
     class Meta:
         model = Summary
         fields = '__all__'
 
-class SummaryResponseSerializer(serializers.ModelSerializer):
+class SummaryThreadSerializer(serializers.ModelSerializer):
     class Meta:
         model = Summary
         fields = ('id','content')
@@ -34,7 +34,7 @@ class DiscussionGuideStateSerializer(serializers.ModelSerializer):
         model = DiscussionGuide
         fields = ('id','state')
 
-class DiscussionGuideResponseSerializer(serializers.ModelSerializer):
+class DiscussionGuideThreadSerializer(serializers.ModelSerializer):
     class Meta:
         model = DiscussionGuide
         fields = ('id','deadline','description','mechanism_expectation', 'state')
@@ -42,9 +42,9 @@ class DiscussionGuideResponseSerializer(serializers.ModelSerializer):
 
 class ThreadRequestSerializer(serializers.ModelSerializer):
     initial_post = InitialPostThreadSerializer()
-    reference_file = ReferenceFileResponseSerializer(many=True)
-    summary = SummaryResponseSerializer(read_only=True)
-    discussion_guide = DiscussionGuideResponseSerializer()
+    reference_file = ReferenceFileThreadSerializer(many=True)
+    summary = SummaryThreadSerializer(read_only=True)
+    discussion_guide = DiscussionGuideThreadSerializer()
     
     class Meta:
         model = Thread
@@ -57,12 +57,29 @@ class ThreadRequestSerializer(serializers.ModelSerializer):
             week=week
         )
         thread.save()
+        initial_post_data = validated_data['initial_post']
         initial_post = InitialPost(
-            tag=validated_data['initial_post']['tag'],
-            content=validated_data['initial_post']['content'],
+            tag=initial_post_data['tag'],
+            content=initial_post_data['content'],
             thread=thread
         )
         initial_post.save()
+        discussion_guide_data = validated_data['discussion_guide']
+        discussion_guide=DiscussionGuide(
+            deadline=discussion_guide_data['deadline'],
+            description=discussion_guide_data['description'],
+            mechanism_expectation=discussion_guide_data['mechanism_expectation'],
+            thread=thread
+        )
+        discussion_guide.save()
+        reference_file_datas = validated_data['reference_file']
+        for reference_file_data in reference_file_datas:
+            reference_file=ReferenceFile(
+                title=reference_file_data['title'],
+                url=reference_file_data['url'],
+                thread=thread
+            )
+            reference_file.save()
         return thread
 
     def update(self, instance, validated_data):
@@ -101,7 +118,7 @@ class ThreadResponseSerializer(serializers.ModelSerializer): #buat tampilan di w
         fields = ('id','title')
 
 class WeekSerializer(serializers.ModelSerializer):
-    threads = ThreadResponseSerializer(read_only=True, many=True)
+    threads = ThreadResponseSerializer(read_only=True,many=True)
     class Meta:
         model = Week
         fields = ('id','name','threads')
