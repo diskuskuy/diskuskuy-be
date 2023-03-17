@@ -19,10 +19,10 @@ class SummarySerializer(serializers.ModelSerializer):
         model = Summary
         fields = '__all__'
 
-# class SummaryThreadSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model=Summary
-#         fields=('id','content')
+class SummaryThreadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Summary
+        fields=('id','content')
 
 class DiscussionGuideRequestSerializer(serializers.ModelSerializer):
     class Meta:
@@ -42,6 +42,7 @@ class DiscussionGuideThreadSerializer(serializers.ModelSerializer):
 class ThreadRequestSerializer(serializers.ModelSerializer):
     initial_post = InitialPostThreadSerializer()
     reference_file = ReferenceFileThreadSerializer(many=True)
+    summary = SummaryThreadSerializer(read_only=True)
     discussion_guide = DiscussionGuideThreadSerializer()
     
     class Meta:
