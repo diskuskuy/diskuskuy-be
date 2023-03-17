@@ -15,5 +15,6 @@ router.register('DiscussionGuide', views.DiscussionGuideViewSet)
 urlpatterns = [
     path('', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('analytics/', views.DiscussionAnalytics.as_view(), name="analytics"),
     path('update-state/<int:pk>/', views.discussion_guide_update_state),
 ]

@@ -85,3 +85,10 @@ class WeekSerializer(serializers.ModelSerializer):
     class Meta:
         model = Week
         fields = ('id','name','threads')
+
+class DiscussionAnalyticsSerializer(serializers.Serializer):
+    replies = serializers.IntegerField()
+    total_participants = serializers.IntegerField()
+    non_participants = serializers.IntegerField()
+    tags = serializers.DictField()
+    
