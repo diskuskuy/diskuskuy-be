@@ -26,7 +26,7 @@ class ReferenceFileViewSet(viewsets.ModelViewSet):
 
 class SummaryViewSet(viewsets.ModelViewSet):
     queryset = Summary.objects.all()
-    serializer_class = SummaryRequestSerializer
+    serializer_class = SummarySerializer
 
 class DiscussionGuideViewSet(viewsets.ModelViewSet):
     queryset = DiscussionGuide.objects.all()
