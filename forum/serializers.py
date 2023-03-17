@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import *
 from post.serializers import *
 from django.shortcuts import get_object_or_404
+from datetime import datetime
 
 class ReferenceFileRequestSerializer(serializers.ModelSerializer):
     class Meta:
@@ -63,7 +64,16 @@ class ThreadRequestSerializer(serializers.ModelSerializer):
         initial_post.save()
         return thread
 
-    # def update():
+    def update(self, instance, validated_data):
+        initial_post_data = validated_data.pop('initial_post')
+        initial_post = instance.initial_post
+        instance.title = validated_data.get('title', instance.title)
+        instance.save()
+
+        initial_post.tag = initial_post_data.get('tag', initial_post.tag)
+        initial_post.content = initial_post_data.get('content', initial_post.content)
+        initial_post.save()
+        return instance
 
 class ThreadResponseSerializer(serializers.ModelSerializer): #buat tampilan di week
     class Meta:
