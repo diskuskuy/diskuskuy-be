@@ -21,8 +21,8 @@ class SummarySerializer(serializers.ModelSerializer):
 
 class SummaryThreadSerializer(serializers.ModelSerializer):
     class Meta:
-        model=Summary
-        fields=('id','content')
+        model = Summary
+        fields = ('id','content')
 
 class DiscussionGuideRequestSerializer(serializers.ModelSerializer):
     class Meta:
