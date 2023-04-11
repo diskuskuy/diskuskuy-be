@@ -69,11 +69,19 @@ class DiscussionAnalytics(APIView):
             "tags": temp
             }).data)
 
+@api_view(['GET'])
+def discussion_guide_get_by_thread_id(request, thread_id):
+    try:
+        discussion_guide = get_object_or_404(DiscussionGuide.objects.all(), thread=thread_id)
+    except DiscussionGuide.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        return Response(DiscussionGuideRequestSerializer(discussion_guide).data)
+    return Response(DiscussionGuideRequestSerializer(discussion_guide).errors, status=status.HTTP_400_BAD_REQUEST)
+    
 @api_view(['PUT'])
 def discussion_guide_update_state(request, pk):
-    """
-    Retrieve, update or delete a code snippet.
-    """
     try:
         discussion_guide = DiscussionGuide.objects.get(pk=pk)
     except DiscussionGuide.DoesNotExist:
