@@ -47,9 +47,9 @@ class DiscussionAnalytics(APIView):
             
             for reply in replies:
                 nested_replies_count += NestedReplyPost.objects.filter(reply_post=reply.id).count()
+                tags_nested = NestedReplyPost.objects.filter(reply_post=reply.id).values_list('tag').annotate(the_count=Count("tag"))
 
-            tags = ReplyPost.objects.values_list('tag').annotate(the_count=Count("tag"))
-            tags_nested = NestedReplyPost.objects.values_list('tag').annotate(the_count=Count("tag"))
+            tags = ReplyPost.objects.filter(initial_post=initial_post.id).values_list('tag').annotate(the_count=Count("tag"))
             for tag in tags:
                 if tag[0] not in temp.keys():
                     temp[tag[0]] = tag[1]
