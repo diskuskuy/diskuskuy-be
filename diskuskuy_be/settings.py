@@ -87,10 +87,10 @@ WSGI_APPLICATION = 'diskuskuy_be.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'eiyykemo',
-        'USER': 'eiyykemo',
-        'PASSWORD': 'zr5LhvBKDYiUesF9rLQoht28lM3Tu5Jc',
-        'HOST': 'tiny.db.elephantsql.com',
+        'NAME': 'jgoyubas',
+        'USER': 'jgoyubas',
+        'PASSWORD': 'Ag_I-gL6dLl-fvMXfl38JMVfsxme95AL',
+        'HOST': 'snuffleupagus.db.elephantsql.com',
         'PORT': '5432',
     }
 }
