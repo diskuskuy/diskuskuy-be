@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+from corsheaders.defaults import default_headers
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,8 +27,15 @@ SECRET_KEY = 'django-insecure-+%t@#yc_4#&-e%u7(k@i6cax9#l%ssa9mq5yn3i7^5$h_9_v=c
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-ALLOWED_ORIGINS = ['https://*', 'http://*']
-CSRF_TRUSTED_ORIGINS = ALLOWED_ORIGINS.copy()
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    "Authentication",
+    "authorization",
+    "x-request-id"
+]
+
+#ALLOWED_ORIGINS = ['https://*', 'http://*']
+#CSRF_TRUSTED_ORIGINS = ALLOWED_ORIGINS.copy()
 
 # Application definition
 
@@ -41,13 +49,14 @@ INSTALLED_APPS = [
     'tinymce',
     'rest_framework',
     'rest_framework.authtoken',
-    # 'corsheaders',
+    'corsheaders',
     'forum',
     'post',
     'autentikasi',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
