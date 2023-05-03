@@ -3,9 +3,11 @@ from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.decorators import action
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 from .serializers import *
 from .models import *
@@ -13,26 +15,43 @@ from .models import *
 # handle request
 
 class WeekViewSet(viewsets.ModelViewSet):
+    authentication_classes=[TokenAuthentication]
+    permission_classes=[IsAuthenticated]
+
     queryset = Week.objects.all()
     serializer_class = WeekSerializer
 
 class ThreadViewSet(viewsets.ModelViewSet):
+    authentication_classes=[TokenAuthentication]
+    permission_classes=[IsAuthenticated]
+
     queryset = Thread.objects.all()
     serializer_class = ThreadRequestSerializer
 
 class ReferenceFileViewSet(viewsets.ModelViewSet):
+    authentication_classes=[TokenAuthentication]
+    permission_classes=[IsAuthenticated]
+
     queryset = ReferenceFile.objects.all()
     serializer_class = ReferenceFileRequestSerializer
 
 class SummaryViewSet(viewsets.ModelViewSet):
+    authentication_classes=[TokenAuthentication]
+    permission_classes=[IsAuthenticated]
+
     queryset = Summary.objects.all()
     serializer_class = SummarySerializer
 
 class DiscussionGuideViewSet(viewsets.ModelViewSet):
+    authentication_classes=[TokenAuthentication]
+    permission_classes=[IsAuthenticated]
+
     queryset = DiscussionGuide.objects.all()
     serializer_class = DiscussionGuideRequestSerializer
 
 class DiscussionAnalytics(APIView):
+    authentication_classes=[TokenAuthentication]
+    permission_classes=[IsAuthenticated]
 
     def get(self, request):
         thread_id = request.query_params.get('thread_id')
@@ -81,6 +100,8 @@ def discussion_guide_get_by_thread_id(request, thread_id):
     return Response(DiscussionGuideRequestSerializer(discussion_guide).errors, status=status.HTTP_400_BAD_REQUEST)
     
 @api_view(['PUT'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def discussion_guide_update_state(request, pk):
     try:
         discussion_guide = DiscussionGuide.objects.get(pk=pk)

@@ -22,4 +22,5 @@ urlpatterns = [
     path('tinymce/', include('tinymce.urls')),
     path('post/', include('post.urls')),
     path('forum/', include('forum.urls')),
+    path('auth/', include('autentikasi.urls')),
 ]
