@@ -114,7 +114,7 @@ WSGI_APPLICATION = 'diskuskuy_be.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'db_diksusi',
+        'NAME': 'db_diskusi',
         'USER': 'diskusi_user',
         'PASSWORD': 'password',
         'HOST': '127.0.0.1',
