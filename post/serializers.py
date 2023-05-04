@@ -28,9 +28,13 @@ class ReplyPostSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ReplyPostResponseSerializer(serializers.ModelSerializer):
+    creator_name = serializers.ReadOnlyField()
+    creator_photo = serializers.ReadOnlyField()
+    creator_role = serializers.ReadOnlyField()
+
     class Meta:
         model = ReplyPost
-        fields = ('id','tag','content','date')
+        fields = ('id','tag','content','date', 'creator_name', 'creator_photo', 'creator_role')
 
 class InitialPostSerializer(serializers.ModelSerializer):
     reply_post = ReplyPostResponseSerializer(read_only=True, many=True)
