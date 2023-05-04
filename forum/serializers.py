@@ -41,7 +41,7 @@ class DiscussionGuideThreadSerializer(serializers.ModelSerializer):
         read_only_fields = ['state']
 
 class ThreadRequestSerializer(serializers.ModelSerializer):
-    initial_post = InitialPostThreadSerializer()
+    initial_post = InitialPostSerializer()
     reference_file = ReferenceFileThreadSerializer(many=True)
     summary = SummaryThreadSerializer(read_only=True)
     discussion_guide = DiscussionGuideThreadSerializer()
@@ -58,9 +58,15 @@ class ThreadRequestSerializer(serializers.ModelSerializer):
         )
         thread.save()
         initial_post_data = validated_data['initial_post']
+        post_data = initial_post_data['post']
+        post = Post(
+            tag=post_data['tag'],
+            content=post_data['content'],
+            creator=post_data['creator'],
+        )
+        post.save()
         initial_post = InitialPost(
-            tag=initial_post_data['tag'],
-            content=initial_post_data['content'],
+            post=post,
             thread=thread
         )
         initial_post.save()
