@@ -19,7 +19,22 @@ class NestedReplyPostSerializer(serializers.ModelSerializer):
     class Meta:
         model = NestedReplyPost
         fields = '__all__'
-        extra_kwargs = {'reply_post': {'write_only': True}}
+
+    def create(self, validated_data):
+        reply_post = get_object_or_404(ReplyPost.objects.all(), pk=validated_data['reply_post'].id)
+        post_data = validated_data['post']
+        post = Post(
+            tag=post_data['tag'],
+            content=post_data['content'],
+            creator=post_data['creator'],
+        )
+        post.save()
+        nested_reply_post = NestedReplyPost(
+            post=post,
+            reply_post=reply_post
+        )
+        nested_reply_post.save()
+        return nested_reply_post
 
 # class NestedReplyPostResponseSerializer(serializers.ModelSerializer):
 #     post = PostSerializer(read_only=True)
@@ -36,6 +51,22 @@ class ReplyPostSerializer(serializers.ModelSerializer):
         model = ReplyPost
         fields = '__all__'
         extra_kwargs = {'initial_post': {'write_only': True}}
+
+    def create(self, validated_data):
+        initial_post = get_object_or_404(InitialPost.objects.all(), pk=validated_data['initial_post'].id)
+        post_data = validated_data['post']
+        post = Post(
+            tag=post_data['tag'],
+            content=post_data['content'],
+            creator=post_data['creator'],
+        )
+        post.save()
+        reply_post = ReplyPost(
+            post=post,
+            initial_post=initial_post
+        )
+        reply_post.save()
+        return reply_post
 
 # class ReplyPostResponseSerializer(serializers.ModelSerializer):
 #     post = PostSerializer(read_only=True)

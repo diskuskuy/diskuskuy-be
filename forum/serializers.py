@@ -25,6 +25,9 @@ class SummaryThreadSerializer(serializers.ModelSerializer):
         fields = ('id','content')
 
 class DiscussionGuideRequestSerializer(serializers.ModelSerializer):
+    thread_title = serializers.ReadOnlyField()
+    week_name = serializers.ReadOnlyField()
+
     class Meta:
         model = DiscussionGuide
         fields = '__all__'
@@ -45,6 +48,7 @@ class ThreadRequestSerializer(serializers.ModelSerializer):
     reference_file = ReferenceFileThreadSerializer(many=True)
     summary = SummaryThreadSerializer(read_only=True)
     discussion_guide = DiscussionGuideThreadSerializer()
+    week_name = serializers.ReadOnlyField()
     
     class Meta:
         model = Thread
