@@ -43,6 +43,11 @@ class DiscussionGuideThreadSerializer(serializers.ModelSerializer):
         fields = ('id','deadline','description','mechanism_expectation', 'state')
         read_only_fields = ['state']
 
+class DiscussionGuideWeekThreadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DiscussionGuide
+        fields = ['deadline']
+
 class ThreadRequestSerializer(serializers.ModelSerializer):
     initial_post = InitialPostSerializer()
     reference_file = ReferenceFileThreadSerializer(many=True)
@@ -123,9 +128,12 @@ class ThreadRequestSerializer(serializers.ModelSerializer):
         return instance
 
 class ThreadResponseSerializer(serializers.ModelSerializer): #buat tampilan di week
+    initial_post = InitialPostWeekThreadSerializer(read_only=True)
+    discussion_guide = DiscussionGuideWeekThreadSerializer(read_only=True)
+    
     class Meta:
         model = Thread
-        fields = ('id','title')
+        fields = ('id', 'title', 'initial_post', 'discussion_guide')
 
 class WeekSerializer(serializers.ModelSerializer):
     threads = ThreadResponseSerializer(read_only=True,many=True)
