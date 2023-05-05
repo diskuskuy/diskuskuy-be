@@ -20,6 +20,12 @@ class CustomUserSerializer(serializers.ModelSerializer):
         model = CustomUser
         fields = '__all__'
 
+class ProfileSerializer(serializers.Serializer):
+    user_id = serializers.IntegerField()
+    name = serializers.CharField()
+    nim = serializers.CharField()
+    photo = serializers.CharField()
+
 class LoginSerializer(serializers.Serializer):
     """
     This serializer defines two fields for authentication:

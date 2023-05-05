@@ -13,6 +13,14 @@ class PostSerializer(serializers.ModelSerializer):
         fields = '__all__'
         extra_kwargs = {'creator': {'write_only': True}}
 
+class PostWeekSerializer(serializers.ModelSerializer):
+    creator_name = serializers.ReadOnlyField()
+    creator_photo = serializers.ReadOnlyField()
+
+    class Meta:
+        model = Post
+        fields = ('creator_name', 'creator_photo')
+
 class NestedReplyPostSerializer(serializers.ModelSerializer):
     post = PostSerializer()
 
@@ -84,9 +92,9 @@ class InitialPostSerializer(serializers.ModelSerializer):
         fields = '__all__'
         extra_kwargs = {'thread': {'write_only': True}}
 
-# class InitialPostThreadSerializer(serializers.ModelSerializer):
-#     post = PostSerializer(read_only=True)
+class InitialPostWeekThreadSerializer(serializers.ModelSerializer):
+    post = PostWeekSerializer(read_only=True)
 
-#     class Meta:
-#         model = InitialPost
-#         fields = ('id', 'post')
+    class Meta:
+        model = InitialPost
+        fields = ['post']
