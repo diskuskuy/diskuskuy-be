@@ -21,10 +21,10 @@ class Post(models.Model):
         return custom_user.name
     
     @property
-    def creator_photo(self):
+    def creator_photo_url(self):
         custom_user = get_object_or_404(CustomUser.objects.all(), user=self.creator)
-        if custom_user.photo:
-            return custom_user.photo.url
+        if custom_user.photo_url:
+            return custom_user.photo_url
         return None
     
     @property

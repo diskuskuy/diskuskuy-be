@@ -4,7 +4,7 @@ from .models import *
 
 class PostSerializer(serializers.ModelSerializer):
     creator_name = serializers.ReadOnlyField()
-    creator_photo = serializers.ReadOnlyField()
+    creator_photo_url = serializers.ReadOnlyField()
     creator_role = serializers.ReadOnlyField()
     number_of_likes = serializers.ReadOnlyField()
 
@@ -15,11 +15,11 @@ class PostSerializer(serializers.ModelSerializer):
 
 class PostWeekSerializer(serializers.ModelSerializer):
     creator_name = serializers.ReadOnlyField()
-    creator_photo = serializers.ReadOnlyField()
+    creator_photo_url = serializers.ReadOnlyField()
 
     class Meta:
         model = Post
-        fields = ('creator_name', 'creator_photo')
+        fields = ('creator_name', 'creator_photo_url')
 
 class NestedReplyPostSerializer(serializers.ModelSerializer):
     post = PostSerializer()
