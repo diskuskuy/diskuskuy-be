@@ -38,12 +38,12 @@ class LogoutView(views.APIView):
         logout(request)
         return Response(None, status=status.HTTP_204_NO_CONTENT)
 
-class CustomUserView(viewsets.ModelViewSet):
-    authentication_classes=[TokenAuthentication]
-    permission_classes=[IsAuthenticated]
+# class CustomUserView(viewsets.ModelViewSet):
+#     authentication_classes=[TokenAuthentication]
+#     permission_classes=[IsAuthenticated]
 
-    queryset = CustomUser.objects.all()
-    serializer_class = CustomUserSerializer
+#     queryset = CustomUser.objects.all()
+#     serializer_class = CustomUserSerializer
     
 class ProfileView(views.APIView):
     authentication_classes=[TokenAuthentication]
@@ -58,7 +58,7 @@ class ProfileView(views.APIView):
                     "user_id": request.user.id,
                     "name":custom_user.name,
                     "nim":lecturer.nim,
-                    "photo":custom_user.photo,
+                    "photo_url":custom_user.photo_url,
                 }).data)
             elif (custom_user.role == 'student'):
                 student = Student.objects.get(student=custom_user)
@@ -66,11 +66,24 @@ class ProfileView(views.APIView):
                     "user_id": request.user.id,
                     "name":custom_user.name,
                     "nim":student.npm,
-                    "photo":custom_user.photo,
+                    "photo_url":custom_user.photo_url,
                 }).data)
         except CustomUser.DoesNotExist or Lecturer.DoesNotExist or Student.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)    
-        return Response(status=status.HTTP_404_NOT_FOUND)  
+        return Response(status=status.HTTP_404_NOT_FOUND) 
+
+    def put(self, request):
+        try:
+            custom_user = CustomUser.objects.get(user=request.user)
+        except CustomUser.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        serializer = UpdateCustomUserPhotoRequestSerializer(custom_user, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
 
     # TODO: update profile endpoint
     # def update(self, request):  
