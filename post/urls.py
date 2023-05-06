@@ -8,9 +8,8 @@ router.register('initialpost', views.InitialPostViewSet)
 router.register('replypost', views.ReplyPostViewSet)
 router.register('nestedreplypost', views.NestedReplyPostViewSet)
 
-# Wire up our API using automatic URL routing.
-# Additionally, we include login URLs for the browsable API.
 urlpatterns = [
     path('', include(router.urls)),
+    path('reaction/<int:pk>/', views.PostReactionViewSet.as_view()),
     path('api-auth/', include('rest_framework.urls', namespace='post'))
 ]

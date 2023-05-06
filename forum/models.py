@@ -12,6 +12,10 @@ class Thread(models.Model):
     
     def __str__(self):
         return self.title
+    
+    @property
+    def week_name(self):
+        return self.week.name
 
 class DiscussionGuide(models.Model):
     deadline = models.DateTimeField()
@@ -30,6 +34,14 @@ class DiscussionGuide(models.Model):
         choices=InquiryState.choices,
         default=InquiryState.PHASE1
     )
+
+    @property
+    def week_name(self):
+        return self.thread.week.name
+    
+    @property
+    def thread_title(self):
+        return self.thread.title
 
 class Summary(models.Model):
     content = models.TextField()

@@ -3,9 +3,11 @@ from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.decorators import action
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 from .serializers import *
 from .models import *
@@ -13,26 +15,43 @@ from .models import *
 # handle request
 
 class WeekViewSet(viewsets.ModelViewSet):
+    authentication_classes=[TokenAuthentication]
+    permission_classes=[IsAuthenticated]
+
     queryset = Week.objects.all()
     serializer_class = WeekSerializer
 
 class ThreadViewSet(viewsets.ModelViewSet):
+    authentication_classes=[TokenAuthentication]
+    permission_classes=[IsAuthenticated]
+
     queryset = Thread.objects.all()
     serializer_class = ThreadRequestSerializer
 
 class ReferenceFileViewSet(viewsets.ModelViewSet):
+    authentication_classes=[TokenAuthentication]
+    permission_classes=[IsAuthenticated]
+
     queryset = ReferenceFile.objects.all()
     serializer_class = ReferenceFileRequestSerializer
 
 class SummaryViewSet(viewsets.ModelViewSet):
+    authentication_classes=[TokenAuthentication]
+    permission_classes=[IsAuthenticated]
+
     queryset = Summary.objects.all()
     serializer_class = SummarySerializer
 
 class DiscussionGuideViewSet(viewsets.ModelViewSet):
+    authentication_classes=[TokenAuthentication]
+    permission_classes=[IsAuthenticated]
+
     queryset = DiscussionGuide.objects.all()
     serializer_class = DiscussionGuideRequestSerializer
 
 class DiscussionAnalytics(APIView):
+    authentication_classes=[TokenAuthentication]
+    permission_classes=[IsAuthenticated]
 
     def get(self, request):
         thread_id = request.query_params.get('thread_id')
@@ -47,9 +66,9 @@ class DiscussionAnalytics(APIView):
             
             for reply in replies:
                 nested_replies_count += NestedReplyPost.objects.filter(reply_post=reply.id).count()
+                tags_nested = NestedReplyPost.objects.filter(reply_post=reply.id).values_list('tag').annotate(the_count=Count("tag"))
 
-            tags = ReplyPost.objects.values_list('tag').annotate(the_count=Count("tag"))
-            tags_nested = NestedReplyPost.objects.values_list('tag').annotate(the_count=Count("tag"))
+            tags = ReplyPost.objects.filter(initial_post=initial_post.id).values_list('tag').annotate(the_count=Count("tag"))
             for tag in tags:
                 if tag[0] not in temp.keys():
                     temp[tag[0]] = tag[1]
@@ -69,11 +88,21 @@ class DiscussionAnalytics(APIView):
             "tags": temp
             }).data)
 
+@api_view(['GET'])
+def discussion_guide_get_by_thread_id(request, thread_id):
+    try:
+        discussion_guide = get_object_or_404(DiscussionGuide.objects.all(), thread=thread_id)
+    except DiscussionGuide.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        return Response(DiscussionGuideRequestSerializer(discussion_guide).data)
+    return Response(DiscussionGuideRequestSerializer(discussion_guide).errors, status=status.HTTP_400_BAD_REQUEST)
+    
 @api_view(['PUT'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def discussion_guide_update_state(request, pk):
-    """
-    Retrieve, update or delete a code snippet.
-    """
     try:
         discussion_guide = DiscussionGuide.objects.get(pk=pk)
     except DiscussionGuide.DoesNotExist:

@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+from corsheaders.defaults import default_headers
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,8 +26,16 @@ SECRET_KEY = 'django-insecure-+%t@#yc_4#&-e%u7(k@i6cax9#l%ssa9mq5yn3i7^5$h_9_v=c
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['10.119.106.3']
+ALLOWED_HOSTS = ['*']
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    "Authentication",
+    "authorization",
+    "x-request-id"
+]
 
+#ALLOWED_ORIGINS = ['https://*', 'http://*']
+#CSRF_TRUSTED_ORIGINS = ALLOWED_ORIGINS.copy()
 
 # Application definition
 
@@ -39,15 +48,19 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'tinymce',
     'rest_framework',
+    'rest_framework.authtoken',
+    'corsheaders',
     'forum',
     'post',
+    'autentikasi',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -73,6 +86,30 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'diskuskuy_be.wsgi.application'
 
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:3000",
+# ]
+
+# CORS_ALLOW_HEADERS = [
+#     'accept',
+#     'accept-encoding',
+#     'authorization',
+#     'content-type',
+#     'dnt',
+#     'origin',
+#     'user-agent',
+#     'x-csrftoken',
+#     'x-requested-with',
+# ]
+
+# CORS_ALLOW_METHODS = [
+#     "DELETE",
+#     "GET",
+#     "OPTIONS",
+#     "PATCH",
+#     "POST",
+#     "PUT",
+# ]
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
@@ -87,10 +124,10 @@ WSGI_APPLICATION = 'diskuskuy_be.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'eiyykemo',
-        'USER': 'eiyykemo',
-        'PASSWORD': 'zr5LhvBKDYiUesF9rLQoht28lM3Tu5Jc',
-        'HOST': 'tiny.db.elephantsql.com',
+        'NAME': 'db_diskusi',
+        'USER': 'diskusi_user',
+        'PASSWORD': 'password',
+        'HOST': '127.0.0.1',
         'PORT': '5432',
     }
 }
@@ -113,6 +150,15 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    # 'DEFAULT_PERMISSION_CLASSES': [
+    #     'rest_framework.permissions.IsAuthenticated',
+    # ],
+}
 
 
 # Internationalization
