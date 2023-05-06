@@ -143,6 +143,6 @@ class WeekSerializer(serializers.ModelSerializer):
 
 class DiscussionAnalyticsSerializer(serializers.Serializer):
     replies = serializers.IntegerField()
-    total_participants = serializers.IntegerField()
+    participants = serializers.IntegerField()
     non_participants = serializers.IntegerField()
     tags = serializers.DictField()

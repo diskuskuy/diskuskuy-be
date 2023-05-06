@@ -12,8 +12,6 @@ from rest_framework.permissions import IsAuthenticated
 from .serializers import *
 from .models import *
 
-# handle request
-
 class WeekViewSet(viewsets.ModelViewSet):
     authentication_classes=[TokenAuthentication]
     permission_classes=[IsAuthenticated]
@@ -53,39 +51,53 @@ class DiscussionAnalytics(APIView):
     authentication_classes=[TokenAuthentication]
     permission_classes=[IsAuthenticated]
 
-    def get(self, request):
-        thread_id = request.query_params.get('thread_id')
+    def get(self, request, thread_id):
+        replies, participants = [], []
+        non_participants_count, replies_count, nested_replies_count = 0, 0, 0
+        tags = {}
 
-        replies, tags, tags_nested = [], [], []
-        total_participants, non_participants, nested_replies_count = 0, 0, 0
-        temp = {}
+        initial_post = get_object_or_404(InitialPost.objects.all(), thread=thread_id)
+        replies = ReplyPost.objects.filter(initial_post=initial_post.id)
+        replies_count = ReplyPost.objects.filter(initial_post=initial_post.id).count()
+        
+        for reply in replies:
+            reply_post = reply.post
+            reply_post_creator = reply_post.creator
 
-        if thread_id is not None:
-            initial_post = get_object_or_404(InitialPost.objects.all(), thread=thread_id)
-            replies = ReplyPost.objects.filter(initial_post=initial_post.id)
-            
-            for reply in replies:
-                nested_replies_count += NestedReplyPost.objects.filter(reply_post=reply.id).count()
-                tags_nested = NestedReplyPost.objects.filter(reply_post=reply.id).values_list('tag').annotate(the_count=Count("tag"))
+            if reply_post_creator not in participants:
+                participants.append(reply_post_creator)
 
-            tags = ReplyPost.objects.filter(initial_post=initial_post.id).values_list('tag').annotate(the_count=Count("tag"))
-            for tag in tags:
-                if tag[0] not in temp.keys():
-                    temp[tag[0]] = tag[1]
+            reply_post_tags = reply_post.tag.lower().split(',')
+            for reply_post_tag in reply_post_tags:
+                if reply_post_tag not in tags.keys():
+                    tags[reply_post_tag] = 1
                 else:
-                    temp[tag[0]] += tag[1]
+                    tags[reply_post_tag] += 1
 
-            for tag in tags_nested:
-                if tag[0] not in temp.keys():
-                    temp[tag[0]] = tag[1]
-                else:
-                    temp[tag[0]] += tag[1]
+            nested_replies_count += NestedReplyPost.objects.filter(reply_post=reply.id).count()
+            nested_replies = NestedReplyPost.objects.filter(reply_post=reply.id)
+
+            for nested_reply in nested_replies:
+                nested_reply_post = nested_reply.post
+                nested_reply_post_creator = nested_reply_post.creator
+
+                if nested_reply_post_creator not in participants:
+                    participants.append(nested_reply_post_creator)
+
+                nested_reply_post_tags = nested_reply_post.tag.lower().split(',')
+                for nested_reply_post_tag in nested_reply_post_tags:
+                    if nested_reply_post_tag not in tags.keys():
+                        tags[nested_reply_post_tag] = 1
+                    else:
+                        tags[nested_reply_post_tag] += 1
+
+        non_participants_count = len(CustomUser.objects.all()) - len(participants)
 
         return Response(DiscussionAnalyticsSerializer({
-            "replies": replies.count() + nested_replies_count, 
-            "total_participants": total_participants, 
-            "non_participants": non_participants,
-            "tags": temp
+            "replies": replies_count + nested_replies_count, 
+            "participants": len(participants), 
+            "non_participants": non_participants_count,
+            "tags": tags
             }).data)
 
 @api_view(['GET'])
