@@ -26,6 +26,18 @@ class ProfileSerializer(serializers.Serializer):
     nim = serializers.CharField()
     photo_url = serializers.CharField()
 
+class LecturerCustomUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['name', 'photo_url']
+
+class LecturerSerializer(serializers.ModelSerializer):
+    lecturer = LecturerCustomUserSerializer()
+
+    class Meta:
+        model = Lecturer
+        fields = '__all__'
+
 class LoginSerializer(serializers.Serializer):
     """
     This serializer defines two fields for authentication:
