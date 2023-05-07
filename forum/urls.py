@@ -10,12 +10,10 @@ router.register('ReferenceFile', views.ReferenceFileViewSet)
 router.register('Summary', views.SummaryViewSet)
 router.register('DiscussionGuide', views.DiscussionGuideViewSet)
 
-# Wire up our API using automatic URL routing.
-# Additionally, we include login URLs for the browsable API.
 urlpatterns = [
     path('', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    path('analytics/', views.DiscussionAnalytics.as_view(), name="analytics"),
+    path('analytics/<int:thread_id>/', views.DiscussionAnalytics.as_view(), name="analytics"),
     path('<int:thread_id>/discussion-guide/', views.discussion_guide_get_by_thread_id),
     path('update-state/<int:pk>/', views.discussion_guide_update_state),
 ]
