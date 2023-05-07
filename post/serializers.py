@@ -1,4 +1,6 @@
 from rest_framework import serializers
+from rest_framework import status
+from rest_framework.response import Response
 
 from .models import *
 
@@ -43,6 +45,16 @@ class NestedReplyPostSerializer(serializers.ModelSerializer):
         )
         nested_reply_post.save()
         return nested_reply_post
+    
+    def update(self, instance, validated_data):
+        if 'post' in validated_data:
+            post_data = validated_data.pop('post')
+            post = instance.post
+            post.tag = post_data.get('tag', post.tag)
+            post.content = post_data.get('content', post.content)
+            post.save()
+            return instance
+        return Response(status=status.HTTP_400_BAD_REQUEST) 
 
 # class NestedReplyPostResponseSerializer(serializers.ModelSerializer):
 #     post = PostSerializer(read_only=True)
@@ -75,6 +87,16 @@ class ReplyPostSerializer(serializers.ModelSerializer):
         )
         reply_post.save()
         return reply_post
+    
+    def update(self, instance, validated_data):
+        if 'post' in validated_data:
+            post_data = validated_data.pop('post')
+            post = instance.post
+            post.tag = post_data.get('tag', post.tag)
+            post.content = post_data.get('content', post.content)
+            post.save()
+            return instance
+        return Response(status=status.HTTP_400_BAD_REQUEST) 
 
 # class ReplyPostResponseSerializer(serializers.ModelSerializer):
 #     post = PostSerializer(read_only=True)
