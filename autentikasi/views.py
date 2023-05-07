@@ -28,6 +28,7 @@ class LoginView(views.APIView):
             "token": token.key,
             "user_id": user.id, 
             "role": custom_user.role,
+            "photo_url": custom_user.photo_url
             }).data)
     
 class LogoutView(views.APIView):
