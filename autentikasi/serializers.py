@@ -70,3 +70,4 @@ class LoginResponseSerializer(serializers.Serializer):
     token = serializers.CharField()
     user_id = serializers.IntegerField()
     role = serializers.CharField()
+    photo_url = serializers.CharField()
