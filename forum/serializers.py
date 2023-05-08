@@ -100,10 +100,12 @@ class ThreadRequestSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         if 'initial_post' in validated_data:
             initial_post_data = validated_data.pop('initial_post')
+            initial_post_post_data = initial_post_data.pop('post')
             initial_post = instance.initial_post
-            initial_post.tag = initial_post_data.get('tag', initial_post.tag)
-            initial_post.content = initial_post_data.get('content', initial_post.content)
-            initial_post.save()
+            initial_post_post = initial_post.post
+            initial_post_post.tag = initial_post_post_data.get('tag', initial_post_post.tag)
+            initial_post_post.content = initial_post_post_data.get('content', initial_post_post.content)
+            initial_post_post.save()
 
         if 'reference_file' in validated_data:
             reference_file_data = validated_data.pop('reference_file')
