@@ -1,4 +1,5 @@
 from django.db import models
+from autentikasi.models import User
 
 class Week(models.Model):
     name = models.CharField(max_length=100)
@@ -16,18 +17,18 @@ class Thread(models.Model):
     @property
     def week_name(self):
         return self.week.name
+    
+class InquiryState(models.TextChoices):
+        PHASE1 = 1
+        PHASE2 = 2
+        PHASE3 = 3
+        PHASE4 = 4
 
 class DiscussionGuide(models.Model):
     deadline = models.DateTimeField()
     description = models.CharField(max_length=500)
     mechanism_expectation = models.CharField(max_length=500)
     thread = models.OneToOneField(Thread, on_delete=models.CASCADE, related_name="discussion_guide")
-
-    class InquiryState(models.TextChoices):
-        PHASE1 = 1
-        PHASE2 = 2
-        PHASE3 = 3
-        PHASE4 = 4
 
     state = models.CharField(
         max_length=255,
@@ -51,3 +52,12 @@ class ReferenceFile(models.Model):
     title = models.CharField(max_length=100)
     url = models.TextField()
     thread = models.ForeignKey(Thread, on_delete=models.CASCADE, related_name="reference_file")
+
+class ForumOnboarding(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=None, related_name="forum_onboarding")
+    thread = models.ForeignKey(Thread, on_delete=models.CASCADE, default=None, related_name="forum_onboarding")
+    state = models.CharField(
+        max_length=255,
+        choices=InquiryState.choices,
+        default=None,
+    )

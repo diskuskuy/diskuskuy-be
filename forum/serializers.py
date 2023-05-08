@@ -148,3 +148,6 @@ class DiscussionAnalyticsSerializer(serializers.Serializer):
     participants = serializers.IntegerField()
     non_participants = serializers.IntegerField()
     tags = serializers.DictField()
+
+class ForumOnboardingSerializer(serializers.Serializer):
+    show_onboarding = serializers.BooleanField()

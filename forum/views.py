@@ -126,3 +126,29 @@ def discussion_guide_update_state(request, pk):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class ForumOnboardingView(APIView):
+    authentication_classes=[TokenAuthentication]
+    permission_classes=[IsAuthenticated]
+
+    def get(self, request):
+        thread_id = request.GET.get('threadId')
+        state = request.GET.get('state')
+        if (thread_id and state):
+            forum_onboarding = ForumOnboarding.objects.filter(user=request.user, thread=thread_id, state=state)
+            if (len(forum_onboarding) > 0):
+                return Response(ForumOnboardingSerializer({
+                    "show_onboarding": False 
+                    }).data)
+            else:
+                thread = get_object_or_404(Thread.objects.all(), pk=thread_id)
+                new_forum_onboarding = ForumOnboarding(
+                    user=request.user,
+                    thread=thread,
+                    state=state
+                )
+                new_forum_onboarding.save()
+                return Response(ForumOnboardingSerializer({
+                    "show_onboarding": True 
+                    }).data)
+        return Response({"threadId and state cannot be empty"}, status=status.HTTP_400_BAD_REQUEST)

@@ -16,4 +16,5 @@ urlpatterns = [
     path('analytics/<int:thread_id>/', views.DiscussionAnalytics.as_view(), name="analytics"),
     path('<int:thread_id>/discussion-guide/', views.discussion_guide_get_by_thread_id),
     path('update-state/<int:pk>/', views.discussion_guide_update_state),
+    path('onboarding', views.ForumOnboardingView.as_view(), name="forum_onboarding"),
 ]
