@@ -15,9 +15,27 @@ class UserSerializer(serializers.ModelSerializer):
             'last_name',
         ]
 
-class CustomUserSerializer(serializers.ModelSerializer):
+class UpdateCustomUserPhotoRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
+        fields = ['photo_url']
+
+class ProfileSerializer(serializers.Serializer):
+    user_id = serializers.IntegerField()
+    name = serializers.CharField()
+    nim = serializers.CharField()
+    photo_url = serializers.CharField()
+
+class LecturerCustomUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['name', 'photo_url']
+
+class LecturerSerializer(serializers.ModelSerializer):
+    lecturer = LecturerCustomUserSerializer()
+
+    class Meta:
+        model = Lecturer
         fields = '__all__'
 
 class LoginSerializer(serializers.Serializer):
@@ -64,3 +82,4 @@ class LoginResponseSerializer(serializers.Serializer):
     token = serializers.CharField()
     user_id = serializers.IntegerField()
     role = serializers.CharField()
+    photo_url = serializers.CharField()

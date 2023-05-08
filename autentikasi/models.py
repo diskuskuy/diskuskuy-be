@@ -9,7 +9,8 @@ class CustomUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     role = models.CharField(max_length=8, choices=ROLE_CHOICES)
     name = models.CharField(max_length=100)
-    photo = models.ImageField(upload_to="profile_photo", default=None, blank=True, null=True)
+    photo_url = models.TextField(default=None, blank=True, null=True)
+    # photo = models.ImageField(upload_to="profile_photo", default=None, blank=True, null=True)
 
     REQUIRED_FIELDS = ('user','role')
 

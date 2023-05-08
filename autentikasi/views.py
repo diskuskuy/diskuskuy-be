@@ -14,7 +14,6 @@ from .serializers import *
 from .models import CustomUser
 
 class LoginView(views.APIView):
-    # This view should be accessible also for unauthenticated users.
     permission_classes = [AllowAny]
 
     def post(self, request, format=None):
@@ -29,6 +28,7 @@ class LoginView(views.APIView):
             "token": token.key,
             "user_id": user.id, 
             "role": custom_user.role,
+            "photo_url": custom_user.photo_url
             }).data)
     
 class LogoutView(views.APIView):
@@ -38,39 +38,50 @@ class LogoutView(views.APIView):
     def post(self, request, format=None):
         logout(request)
         return Response(None, status=status.HTTP_204_NO_CONTENT)
-
-class CustomUserView(viewsets.ModelViewSet):
+    
+class ProfileView(views.APIView):
     authentication_classes=[TokenAuthentication]
     permission_classes=[IsAuthenticated]
 
-    queryset = CustomUser.objects.all()
-    serializer_class = CustomUserSerializer
-    
-# class ProfileView(viewsets.GenericViewSet):
-#     serializer_class = UserSerializer
-#     authentication_classes=[TokenAuthentication]
-#     permission_classes=[IsAuthenticated]
+    def get(self, request):
+        try:
+            custom_user = CustomUser.objects.get(user=request.user)
+            if (custom_user.role == 'lecturer'):
+                lecturer = Lecturer.objects.get(lecturer=custom_user)
+                return Response(ProfileSerializer({
+                    "user_id": request.user.id,
+                    "name":custom_user.name,
+                    "nim":lecturer.nim,
+                    "photo_url":custom_user.photo_url,
+                }).data)
+            elif (custom_user.role == 'student'):
+                student = Student.objects.get(student=custom_user)
+                return Response(ProfileSerializer({
+                    "user_id": request.user.id,
+                    "name":custom_user.name,
+                    "nim":student.npm,
+                    "photo_url":custom_user.photo_url,
+                }).data)
+        except CustomUser.DoesNotExist or Lecturer.DoesNotExist or Student.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)    
+        return Response(status=status.HTTP_404_NOT_FOUND) 
 
-#     def get_object(self):
-#         # try:
-#         #     custom_user = CustomUser.objects.get(user=self.request.user)
-#         #     print(custom_user)
-#         # except CustomUser.DoesNotExist:
-#         #     return Response(status=status.HTTP_404_NOT_FOUND)
-#         return self.request.user
-    
-#     def perform_update(self, serializer):
-#         instance = serializer.save()
-#         send_email_confirmation(user=self.request.user, modified=instance)
+    def put(self, request):
+        try:
+            custom_user = CustomUser.objects.get(user=request.user)
+        except CustomUser.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
-#     # def get(self):
-#     #     print(self)
-#     #     print(self.request)
-#     #     print(self.request.user)
-#     #     # try:
-#     #     #     custom_user = CustomUser.objects.get(user=self.request.user)
-#     #     #     print(custom_user)
-#     #     # except CustomUser.DoesNotExist:
-#     #     #     return Response(status=status.HTTP_404_NOT_FOUND)
-#     #     return self.request.user
+        serializer = UpdateCustomUserPhotoRequestSerializer(custom_user, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
+class LecturerView(views.APIView):
+    authentication_classes=[TokenAuthentication]
+    permission_classes=[IsAuthenticated]
+
+    def get(self, request):
+        lecturers = Lecturer.objects.all()
+        return Response(LecturerSerializer(lecturers, many=True).data)
