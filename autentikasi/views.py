@@ -38,13 +38,6 @@ class LogoutView(views.APIView):
     def post(self, request, format=None):
         logout(request)
         return Response(None, status=status.HTTP_204_NO_CONTENT)
-
-# class CustomUserView(viewsets.ModelViewSet):
-#     authentication_classes=[TokenAuthentication]
-#     permission_classes=[IsAuthenticated]
-
-#     queryset = CustomUser.objects.all()
-#     serializer_class = CustomUserSerializer
     
 class ProfileView(views.APIView):
     authentication_classes=[TokenAuthentication]
@@ -85,6 +78,10 @@ class ProfileView(views.APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
+class LecturerView(views.APIView):
+    authentication_classes=[TokenAuthentication]
+    permission_classes=[IsAuthenticated]
 
-    # TODO: update profile endpoint
-    # def update(self, request):  
+    def get(self, request):
+        lecturers = Lecturer.objects.all()
+        return Response(LecturerSerializer(lecturers, many=True).data)
