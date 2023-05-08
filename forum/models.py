@@ -28,6 +28,7 @@ class DiscussionGuide(models.Model):
         PHASE2 = 2
         PHASE3 = 3
         PHASE4 = 4
+        PHASE5 = 5
 
     state = models.CharField(
         max_length=255,
