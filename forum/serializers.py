@@ -148,3 +148,9 @@ class DiscussionAnalyticsSerializer(serializers.Serializer):
     participants = serializers.IntegerField()
     non_participants = serializers.IntegerField()
     tags = serializers.DictField()
+
+class BreadcrumbSerializer(serializers.ModelSerializer):
+    week_name = serializers.ReadOnlyField()
+    class Meta:
+        model = Thread
+        fields = ('id', 'week_name')

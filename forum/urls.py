@@ -9,6 +9,7 @@ router.register('Thread', views.ThreadViewSet)
 router.register('ReferenceFile', views.ReferenceFileViewSet)
 router.register('Summary', views.SummaryViewSet)
 router.register('DiscussionGuide', views.DiscussionGuideViewSet)
+router.register('Breadcrumb', views.BreadcrumbViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
