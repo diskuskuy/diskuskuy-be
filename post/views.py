@@ -8,6 +8,13 @@ from rest_framework.views import APIView
 from .serializers import *
 from .models import *
 
+class PostViewSet(viewsets.ModelViewSet):
+    authentication_classes=[TokenAuthentication]
+    permission_classes=[IsAuthenticated]
+
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+
 class InitialPostViewSet(viewsets.ModelViewSet):
     authentication_classes=[TokenAuthentication]
     permission_classes=[IsAuthenticated]
