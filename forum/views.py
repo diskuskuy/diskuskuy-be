@@ -12,6 +12,13 @@ from rest_framework.permissions import IsAuthenticated
 from .serializers import *
 from .models import *
 
+class BreadcrumbViewSet(viewsets.ModelViewSet):
+    authentication_classes=[TokenAuthentication]
+    permission_classes=[IsAuthenticated]
+
+    queryset = Thread.objects.all()
+    serializer_class = BreadcrumbSerializer
+
 class WeekViewSet(viewsets.ModelViewSet):
     authentication_classes=[TokenAuthentication]
     permission_classes=[IsAuthenticated]

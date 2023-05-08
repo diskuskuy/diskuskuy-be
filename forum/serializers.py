@@ -151,3 +151,8 @@ class DiscussionAnalyticsSerializer(serializers.Serializer):
 
 class ForumOnboardingSerializer(serializers.Serializer):
     show_onboarding = serializers.BooleanField()
+class BreadcrumbSerializer(serializers.ModelSerializer):
+    week_name = serializers.ReadOnlyField()
+    class Meta:
+        model = Thread
+        fields = ('id', 'week_name')
