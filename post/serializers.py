@@ -13,7 +13,6 @@ class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = '__all__'
-        extra_kwargs = {'creator': {'write_only': True}}
 
 class PostWeekSerializer(serializers.ModelSerializer):
     creator_name = serializers.ReadOnlyField()
