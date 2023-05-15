@@ -19,8 +19,8 @@ class Thread(models.Model):
 
 class DiscussionGuide(models.Model):
     deadline = models.DateTimeField()
-    description = models.CharField(max_length=500)
-    mechanism_expectation = models.CharField(max_length=500)
+    description = models.TextField()
+    mechanism_expectation = models.TextField()
     thread = models.OneToOneField(Thread, on_delete=models.CASCADE, related_name="discussion_guide")
 
     class InquiryState(models.TextChoices):
