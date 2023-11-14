@@ -19,7 +19,8 @@
 
 6. Buka text editor, lalu ganti konfigurasi basis data di diskuskuy_be/settings.py sesuai kebutuhan. Di bawah ini merupakan contoh konfigurasi basis data untuk terhubung dengan basis data di server PostgreSQL:
 
-`DATABASES = {
+```json
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': [nama_basis_data],
@@ -28,7 +29,8 @@
         'HOST': [IP address host],
         'PORT': [port],
     }
-}`
+}
+```
 
 Nilai ENGINE dapat disesuaikan dengan SQL server yang digunakan. Sedangkan nilai NAME, USER, PASSWORD, HOST, PASSWORD, HOST, dan PORT disesuaikan dengan basis data yang akan digunakan. HOST dan PORT disesuaikan dengan basis data yang digunakan. Jika ingin terhubung ke basis data pada server yang dijalankan di mesin yang sama, maka nilai HOST menjadi `127.0.0.1` dan nilai PORT menjadi port server postgreSQL, umumnya 5432. Jika ingin terhubung ke basis data di server cloud, maka nilai HOST dan PORT menjadi host dan port dari basis data tersebut. Untuk nilai NAME, USER, dan PASSWORD, diisi dengan data user, password, dan nama basis data yang dibuat di server.
 
